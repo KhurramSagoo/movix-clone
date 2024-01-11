@@ -5,6 +5,7 @@ const headers = {
   Authorization: "bearer " + TMDB_TOKEN,
 };
 export const fetchDataFromApi = async (url, params) => {
+  //url is the end point like //upcoming movies, popular movies
   try {
     const { data } = await axios.get(BASE_URL + url, {
       //configurations
