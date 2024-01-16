@@ -18,9 +18,12 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const controlNavbar = () => {
+    useEffect(() => {
+      window.scrollTo();
+    }, [location]);
     // console.log(window.scrollY);
     if (window.scrollY > 200) {
-      if (window.scrollY > lastScrollY) {
+      if (window.scrollY > lastScrollY && !mobileMenu) {
         setShow("hide");
       } else {
         setShow("show");
