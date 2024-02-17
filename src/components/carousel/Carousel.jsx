@@ -13,7 +13,7 @@ import PosterFallback from "../../assets/no-poster.png";
 import CircleRating from "../circleRating/CircleRating";
 import Genres from "../genres/Genres";
 
-const Carousel = ({ data, loading, endpoint }) => {
+const Carousel = ({ data, loading, endpoint, title }) => {
   const carouselContainer = useRef();
   const { url } = useSelector((state) => state.home);
   const navigate = useNavigate();
@@ -47,6 +47,15 @@ const Carousel = ({ data, loading, endpoint }) => {
   return (
     <div className="carousel">
       <ContentWrapper>
+        {title && <div className="carouselTitle">{title}</div>}
+        <BsFillArrowLeftCircleFill
+          className="carouselLeftNav arrow"
+          onClick={() => navigation("left")}
+        />
+        <BsFillArrowRightCircleFill
+          className="carouselRighttNav arrow"
+          onClick={() => navigation("right")}
+        />
         {!loading ? (
           <div className="carouselItems" ref={carouselContainer}>
             {data?.map((item) => {
@@ -55,33 +64,23 @@ const Carousel = ({ data, loading, endpoint }) => {
                 : PosterFallback;
               return (
                 <div
-                  className="carouselItem"
                   key={item.id}
+                  className="carouselItem"
                   onClick={() =>
-                    navigate(`/${item.media_type || endpoint}/${item.id}}`)
+                    navigate(`/${item.media_type || endpoint}/${item.id}`)
                   }
                 >
                   <div className="posterBlock">
-                    <img
-                      src={posterUrl}
-                      alt=""
-                      style={{
-                        width: "100%",
-                        // height: "auto",
-                        aspectRatio: "1/1.5",
-                      }}
-                    />
+                    <Img src={posterUrl} />
                     <CircleRating rating={item.vote_average.toFixed(1)} />
-                    <Genres
-                      data={item.genre_ids.slice(0, 2)}
-                      className="genres"
-                    />
+                    <Genres data={item.genre_ids.slice(0, 2)} />
                   </div>
-
                   <div className="textBlock">
                     <span className="title">{item.title || item.name}</span>
                     <span className="date">
-                      {dayjs(item.release_date).format("MMM D, YYYY")}
+                      {dayjs(item.release_date || item.first_air_date).format(
+                        "MMM D, YYYY"
+                      )}
                     </span>
                   </div>
                 </div>
@@ -97,15 +96,6 @@ const Carousel = ({ data, loading, endpoint }) => {
             {skItem()}
           </div>
         )}
-
-        <BsFillArrowLeftCircleFill
-          className="carouselLeftNav arrow"
-          onClick={() => navigation("left")}
-        />
-        <BsFillArrowRightCircleFill
-          className="carouselRightNav arrow"
-          onClick={() => navigation("right")}
-        />
       </ContentWrapper>
     </div>
   );
